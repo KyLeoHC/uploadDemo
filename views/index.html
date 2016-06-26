@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传</title>
+    <style>
+        .container {
+            border: 2px solid #919191;
+        }
+
+        .upload-area {
+            margin: 10px;
+            border: 2px solid #919191;
+        }
+
+        .progress, .line {
+            border-radius: 10px;
+            width: 200px;
+            height: 50px;
+        }
+
+        .progress {
+            position: relative;
+            margin: 10px;
+            border: 2px solid #c7c7c7;
+        }
+
+        .line {
+            background-color: #87ff96;
+        }
+
+        .percent {
+            position: absolute;
+            top: 30%;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="upload1" class="upload-area">
+        <h3>文件分块上传</h3>
+        <div class="progress">
+            <div class="line" style="width: 0%;"></div>
+            <span class="percent">0%</span>
+        </div>
+        <div>
+            <input id="uploadBtn1" type="file">
+        </div>
+    </div>
+
+    <div id="upload2" class="upload-area">
+        <h3>文件不分块上传</h3>
+        <div class="progress">
+            <div class="line" style="width: 0%;"></div>
+            <span class="percent">0%</span>
+        </div>
+        <div>
+            <input id="uploadBtn2" type="file">
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript">
+    !window.jQuery && document.write('<script src="/lib/jquery-2.2.4.js"><\/script>');
+</script>
+<script type="text/javascript" src="/js/upload.js"></script>
+<script type="text/javascript">
+    $(function () {
+        (function () {
+            var area = '1';
+            var lineEl = document.querySelector('#id .line'.replace('id', 'upload' + area)),
+                    percentEl = document.querySelector('#id .percent'.replace('id', 'upload' + area));
+
+            function setProgress(percent) {
+                lineEl.style.width = percent;
+                percentEl.innerText = percent;
+            }
+
+            $('#uploadBtn' + area).upload({
+                'url': '/upload',
+                'immediately': true,
+                'onBefore': function () {
+                    setProgress('0%')
+                },
+                'onProgress': function (current, total) {
+                    setProgress(Math.round(current / total * 100) + '%');
+                },
+                'onComplete': function () {
+                    setProgress('100%');
+                }
+            });
+        }());
+
+        (function () {
+            var area = '2';
+            var lineEl = document.querySelector('#id .line'.replace('id', 'upload' + area)),
+                    percentEl = document.querySelector('#id .percent'.replace('id', 'upload' + area));
+
+            function setProgress(percent) {
+                lineEl.style.width = percent;
+                percentEl.innerText = percent;
+            }
+
+            $('#uploadBtn' + area).upload({
+                'url': '/upload',
+                'immediately': true,
+                'needDivided': false,//不分块
+                'onBefore': function () {
+                    setProgress('0%')
+                },
+                'onProgress': function (current, total) {
+                    setProgress(Math.round(current / total * 100) + '%');
+                },
+                'onComplete': function () {
+                    setProgress('100%');
+                }
+            });
+        }());
+    });
+</script>
+</body>
+</html>
