@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "ejs": "^2.4.2",
+    "faye-websocket": "^0.11.0",
     "multiparty": "^4.1.2"
   }
 }

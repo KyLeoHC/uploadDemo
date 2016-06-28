@@ -60,12 +60,45 @@
             <input id="uploadBtn2" type="file">
         </div>
     </div>
+
+    <div class="upload-area">
+        <h3>websocket</h3>
+        <button id="testWebSocket" type="button">test</button>
+    </div>
 </div>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 <script type="text/javascript">
     !window.jQuery && document.write('<script src="/lib/jquery-2.2.4.js"><\/script>');
 </script>
 <script type="text/javascript" src="/js/upload.js"></script>
+<script type="text/javascript">
+    (function () {
+        var socket = new WebSocket('ws://localhost:3000');
+
+        // 打开Socket
+        socket.onopen = function (event) {
+
+            // 发送一个初始化消息
+
+
+            // 监听消息
+            socket.onmessage = function (event) {
+                console.log('Client received a message', event);
+            };
+
+            // 监听Socket的关闭
+            socket.onclose = function (event) {
+                console.log('Client notified socket has closed', event);
+            };
+
+            // 关闭Socket....
+            //socket.close()
+        };
+        document.querySelector('#testWebSocket').addEventListener('click', function () {
+            socket.send('I am the client and I\'m listening!');
+        }, false);
+    }());
+</script>
 <script type="text/javascript">
     $(function () {
         (function () {
